@@ -1,0 +1,67 @@
+{
+    "Tests": [
+        {
+            "Convey": "progenitor should have added member 'founder' at genesis",
+            "Zome": "congress",
+            "FnName": "getMembers",
+            "Input": "",
+            "Regexp": "\\[{\"address\":\"%key%\",\"memberSince\":.*,\"name\":\"founder\"}\\]"
+        },
+        {
+            "Convey": "isMember on non-member should return null",
+            "Zome": "congress",
+            "FnName": "isMember",
+            "Input": "%agent1%",
+            "Output": null
+        },
+        {
+            "Convey": "it should work to call add member",
+            "Zome": "congress",
+            "FnName": "addMember",
+            "Input": {"address":"%agent1%","name":"jane"},
+            "Output": "%h1%"
+        },
+        {
+            "Convey": "isMember on member should return memberEntry data",
+            "Zome": "congress",
+            "FnName": "isMember",
+            "Input": "%agent1%",
+            "Output": null
+        },
+        {
+            "Convey": "new member should have been added",
+            "Zome": "congress",
+            "FnName": "getMembers",
+            "Input": "",
+            "Regexp": "{\"address\":\"%agent1%\",\"memberSince\":.*,\"name\":\"jane\"}"
+        },
+        {
+            "Convey": "calling remove member should work",
+            "Zome": "congress",
+            "FnName": "removeMember",
+            "Input": "%h1%",
+            "Output": "%h0%"
+        },
+        {
+            "Convey": "member should have been removed",
+            "Zome": "congress",
+            "FnName": "getMembers",
+            "Input": "",
+            "Regexp": "\\[{\"address\":\"%key%\",\"memberSince\":.*,\"name\":\"founder\"}\\]"
+        }
+    ],
+    "Identity":"the progenitor",
+    "Fixtures": {
+        "Agents": [
+            {
+                "Hash": "QmPmwZeLdCCaVaYyXFUz3LLWVKbP9e8DPy2ND7Bw7vjXXC",
+                "Identity": "the progenitor"
+            },
+            {
+                "Hash": "QmVGtdTZdTFaLsaj2RwdVG8jcjNNcp1DE914DKZ2kHmXHy",
+                "Identity": "jane fiddlesticks"
+            }
+
+        ]
+    }
+}
