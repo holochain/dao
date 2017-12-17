@@ -1,10 +1,11 @@
 {
+    "Identity":"the progenitor",
     "Tests": [
         {
             "Convey": "it should work to call new proposal",
             "Zome": "congress",
             "FnName": "newProposal",
-            "Input": {"description":"save the whales","recipient":"%agent1%","amount":10000,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"},
+            "Input": {"description":"save the whales","recipient":"%agent0%","amount":10000,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"},
             "Output": "%h1%"
         },
         {
@@ -12,14 +13,14 @@
             "Zome": "congress",
             "FnName": "getProposals",
             "Input": "",
-            "Output": [{"description":"save the whales","recipient":"%agent1%","amount":10000,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"}]
+            "Output": [{"description":"save the whales","recipient":"%agent0%","amount":10000,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"}]
         },
         {
             "Convey": "proposal should have been added to originator",
             "Zome": "congress",
             "FnName": "getProposals",
             "Input": "%key%",
-            "Output": [{"description":"save the whales","recipient":"%agent1%","amount":10000,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"}]
+            "Output": [{"description":"save the whales","recipient":"%agent0%","amount":10000,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"}]
         },
         {
             "Convey": "it should work to vote on a proposal",
@@ -86,13 +87,8 @@
             "Output": {"numberOfVotes":1,"excecuted":true,"currentResult":1}
         }
     ],
-    "Identity":"the progenitor",
     "Fixtures": {
         "Agents": [
-            {
-                "Hash": "QmPmwZeLdCCaVaYyXFUz3LLWVKbP9e8DPy2ND7Bw7vjXXC",
-                "Identity": "the progenitor"
-            },
             {
                 "Hash": "QmVGtdTZdTFaLsaj2RwdVG8jcjNNcp1DE914DKZ2kHmXHy",
                 "Identity": "jane fiddlesticks"

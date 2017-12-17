@@ -2,14 +2,14 @@
     "Version": 1,
     "UUID": "1b4400ce-df71-11e7-8f0e-54ee75d2f20c",
     "Name": "holodao",
-    "RequiresVersion": 18,
+    "RequiresVersion": 19,
     "DHTConfig": {
         "HashType": "sha2-256"
     },
     "Properties": {
         "description": "holochain equivalent of the Ethereum dao contract",
         "language": "en",
-        "progenitorHash":"QmPmwZeLdCCaVaYyXFUz3LLWVKbP9e8DPy2ND7Bw7vjXXC",
+        "progenitorHash":"QmQXSJoGkwdF2R7Xgc5cJXhKoRRdUKPHLLtTu3VqfGdqoV",
         "progenitorIdentity":"the progenitor"
     },
     "Progenitor": {

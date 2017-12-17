@@ -1,4 +1,5 @@
 {
+    "Identity":"the progenitor",
     "Tests": [
         {
             "Convey": "initial owner is the progenitor",
@@ -33,11 +34,10 @@
             "Exposure": "public"
         }
     ],
-    "Identity":"the progenitor",
     "Fixtures": {
         "Agents": [
             {
-                "Hash": "QmPmwZeLdCCaVaYyXFUz3LLWVKbP9e8DPy2ND7Bw7vjXXC",
+                "Hash": "QmQXSJoGkwdF2R7Xgc5cJXhKoRRdUKPHLLtTu3VqfGdqoV",
                 "Identity": "the progenitor"
             },
             {

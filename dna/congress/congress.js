@@ -273,11 +273,16 @@ function validateLink(linkEntryType,baseHash,links,pkg,sources){
 }
 
 function isMember(address) {
-    var links = getLinks(address,"member",{Load:true});
+    var links = getLinks(getDirectory(),"member",{Load:true});
     if (isErr(links)) {
-        return null;
+        links = [];
     }
-    return links[0];
+    for(var i=0;i<links.length;i++) {
+        if (links[i].Entry.address == address) {
+            return links[i].Hash;
+        }
+    }
+    return null;
 }
 
 function getMembers() {

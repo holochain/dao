@@ -1,0 +1,14 @@
+{
+    "Tests":
+    [
+        {
+            "Time":2000,
+            "Convey":"confirm that this clone in partyb is a member",
+            "Zome": "congress",
+            "FnName": "getMembers",
+            "Input": "",
+            "Exposure":"public",
+            "Regexp": "{\"address\":\"%key%\",\"memberSince\":.*,\"name\":\"partyb.%clone%@.*\"}"
+        }
+    ]
+}
