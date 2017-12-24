@@ -13,6 +13,9 @@
             },
             "progenitorIdentity": {
                 "type":"string"
+            },
+            "creditLimit": {
+                "type":"integer"
             }
 	}
 }

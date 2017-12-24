@@ -4,7 +4,7 @@
             "Convey": "change rules for scenario",
             "Zome": "congress",
             "FnName": "changeVotingRules",
-            "Input": {"debatingPeriodInMinutes":0,"majorityMargin":5,"minimumQuorum":5},
+            "Input": {"debatingPeriodInMinutes":0,"majorityMargin":0,"minimumQuorum":2},
             "Output": "%h1%"
         },
         {
@@ -13,7 +13,7 @@
             "FnName": "addMember",
             "Input": {"address":"%partya.%reps%_key%","name":"%partya.%reps%_str%"},
             "Output": "%h1%",
-            "Repeat": 2
+            "Repeat": 3
         },
         {
             "Convey": "add partyb members",

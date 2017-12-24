@@ -16,5 +16,5 @@
                     "format": "date-time"
 		}
 	},
-    "required": ["description","recipient", "amount","votingDeadline"]
+    "required": ["description","recipient","amount","votingDeadline"]
 }

@@ -10,7 +10,8 @@
         "description": "holochain equivalent of the Ethereum dao contract",
         "language": "en",
         "progenitorHash":"QmQXSJoGkwdF2R7Xgc5cJXhKoRRdUKPHLLtTu3VqfGdqoV",
-        "progenitorIdentity":"the progenitor"
+        "progenitorIdentity":"the progenitor",
+        "creditLimit":"500"
     },
     "Progenitor": {
         "Identity": "the progentior",
@@ -97,6 +98,10 @@
                 {
                     "Name": "rules_links",
                     "DataFormat": "links"
+                },
+                {
+                    "Name": "funding_links",
+                    "DataFormat": "links"
                 }
             ],
             "Functions": [
@@ -156,7 +161,71 @@
                     "Exposure": "public"
                 },
                 {
+                    "Name": "fundProposal",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
                     "Name": "executeProposal",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "proposalExists",
+                    "CallingType": "string",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "completionExists",
+                    "CallingType": "string",
+                    "Exposure": "public"
+                }
+            ]
+        },
+        {
+            "Name": "transactions",
+            "Description": "Execution and validation of mutual credit transactions",
+            "CodeFile": "transactions.js",
+            "Entries": [
+                {
+                    "Name": "transaction",
+                    "DataFormat": "json",
+                    "Schema": "",
+                    "SchemaFile": "transaction.json",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "preauth",
+                    "DataFormat": "json",
+                    "Schema": "",
+                    "SchemaFile": "preauth.json",
+                    "Sharing": "public"
+                }
+            ],
+            "RibosomeType": "js",
+            "Functions": [
+                {
+                    "Name": "transactionCreate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "transactionRead",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "getBalance",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "preauthCreate",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "preauthCancel",
                     "CallingType": "json",
                     "Exposure": "public"
                 }

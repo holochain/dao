@@ -1,0 +1,27 @@
+{
+    "Tests":
+    [
+        {
+            "Convey":"implementer's balance at the start should be 0",
+            "Zome": "transactions",
+            "FnName": "getBalance",
+            "Output": 0,
+            "Exposure":"public"
+        },
+        {
+            "Wait": 5500,
+            "Convey": "implementer executes proposals should succeed",
+            "Zome": "congress",
+            "Raw": true,
+            "Input": "var results=[];var proposals = getProposals('');for (var i=0;i<proposals.length;i++) {results.push(executeProposal(proposals[i].hash))}; JSON.stringify(results)",
+            "Output": "[\"%h8%\",\"%h5%\",\"%h2%\"]"
+        },
+        {
+            "Convey":"implementer's balance after excecution should be the funding",
+            "Zome": "transactions",
+            "FnName": "getBalance",
+            "Output": 300,
+            "Exposure":"public"
+        }
+    ]
+}

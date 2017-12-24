@@ -24,10 +24,8 @@ function genesis() {
 
 function proposalExists(hash) {
     var proposal = get(hash,{GetMask:HC.GetMask.EntryType});
-
     if (isErr(proposal)) return false;
     if (proposal != "proposal") return false;
-
     return true;
 }
 
@@ -140,6 +138,27 @@ function validateCompletionLinks(links,sources) {
     return true;
 }
 
+function validateFundingLinks(links,sources) {
+    // only one link
+    if (links.length != 1) return false;
+    // tag must be fund
+    if (links[0].Tag != "fund") return false;
+
+    var proposalHash = links[0].Base;
+    // proposal should exist and be a proposal
+    if (!proposalExists(proposalHash)) return false;
+
+    var preauthHash = links[0].Link;
+    // link should be an existing preauth
+    var preauth = get(preauthHash,{GetMask:HC.GetMask.All});
+    if (isErr(preauth)) return false;
+    if (preauth.EntryType != "preauth") return false;
+    var entry = JSON.parse(preauth.Entry);
+    if (entry.payload.proposal!=proposalHash) return false;
+    return true;
+
+}
+
 /**
  * Called to validate any changes to the DHT
  * @param {string} entryName - the name of entry being modified
@@ -161,6 +180,9 @@ function validateCommit (entryName, entry, header, pkg, sources) {
         return validateVoteLinks(entry.Links,sources);
     case "completion_links":
         return validateCompletionLinks(entry.Links,sources);
+    case "funding_links":
+        return validateFundingLinks(entry.Links,sources);
+        return true;
     default:
         return validate(entryName,entry,header,pkg,sources);
     }
@@ -267,6 +289,9 @@ function validateLink(linkEntryType,baseHash,links,pkg,sources){
     case "completion_links":
         if (!validateCompletionLinks(links,sources)) return false;
         return true;
+    case "funding_links":
+        if (!validateFundingLinks(links,sources)) return false;
+        return true;
     default:
         return false;
     }
@@ -302,7 +327,7 @@ function getProposals(base) {
     if (base == "") {
         base = getProposalBase();
     }
-    return getLinksEntries(base,"proposal");
+    return getLinksEntries(base,"proposal",true);
 }
 
 function addMember(params) {
@@ -394,8 +419,28 @@ function executeProposal(proposal) {
     var status = votingStatus(proposal);
     var rules = getVotingRules();
 
+    var passed = status.currentResult > rules.majorityMargin;
+    var fundingParams = [];
+
+    if (passed) {
+        var links = getLinks(proposal,"fund",{Load:true});
+        if (!isErr(links) && links.length > 0) {
+            for (var i=0;i<links.length;i++) {
+                var funding = links[i].Entry;
+                var params = {
+                    role:"receiver",
+                    amount: funding.amount,
+                    from: links[i].Source,
+                    description: "funding from proposal:"+proposal,
+                    preauth: links[i].Hash
+                };
+                fundingParams.push(params);
+            }
+        }
+    }
+
     var completionEntry = {
-        passed:status.currentResult > rules.majorityMargin,
+        passed:passed,
         proposal:proposal
     };
 
@@ -406,8 +451,24 @@ function executeProposal(proposal) {
     var completionHash = commit("completion",completionEntry);
     if (!isErr(completionHash)) {
         commit("completion_links",{Links:[{Base:proposal,Link:completionHash,Tag:"completion"}]});
+
+        // if the proposal passed and includes funding, execute the transactions
+        if (passed) {
+            for (var i=0;i<fundingParams.length;i++) {
+                var preauthHash = call('transactions','transactionCreate',fundingParams[i]);
+            }
+        }
     }
     return completionHash;
+}
+
+function fundProposal(params) {
+    var preauthHash = call('transactions','preauthCreate',params);
+    preauthHash = JSON.parse(preauthHash);
+    if (!isErr(preauthHash)) {
+        commit("funding_links",{Links:[{Base:params.proposal,Link:preauthHash,Tag:"fund"}]});
+    }
+    return preauthHash;
 }
 
 
@@ -442,14 +503,18 @@ function getInitialRules() {
     return {minimumQuorum:100,debatingPeriodInMinutes:1000,majorityMargin:50};
 }
 
-function getLinksEntries(baseHash,tag) {
+function getLinksEntries(baseHash,tag,addHash) {
     var links = getLinks(baseHash,tag,{Load:true});
     if (isErr(links)) {
         links = [];
     }
     var entries = [];
     for (var i=0;i<links.length;i++) {
-        entries.push(links[i].Entry);
+        var entry = links[i].Entry;
+        if (addHash) {
+            entry.hash = links[i].Hash;
+        }
+        entries.push(entry);
     }
     return entries;
 }
