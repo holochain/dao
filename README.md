@@ -38,7 +38,6 @@ Currently there is one scenario test:
 hcdev -mdns=true scenario benchmark
 ```
 This scenario spins up the owner node and a bunch of member nodes which create and vote on a bunch of proposals.
-```
 
 ## Contribute
 We welcome pull requests and issue tickets.  Find us on [gitter](https://gitter.im/metacurrency/holochain) to chat.
