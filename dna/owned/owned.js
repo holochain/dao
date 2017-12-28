@@ -112,10 +112,10 @@ function validateOwnerLinks(links,sources) {
         // if this is a modify it will have two links the first of which
         // will be the del and the second the new link.
         if (links[0].LinkAction != HC.LinkAction.Del) return false;
-        if ((links[1].LinkAction != HC.LinkAction.Add)&&(links[1].LinkAction !=undefined)) return false;
+        if ((links[1].LinkAction != HC.LinkAction.Add)/* TODO: test for undefined only until fixed in core */&&(links[1].LinkAction !=undefined)) return false;
     } else if (length==1) {
         // if this is a new handle, there will just be one Add link
-        if ((links[0].LinkAction != HC.LinkAction.Add)&&(links[0].LinkAction != undefined)) return false;
+        if ((links[0].LinkAction != HC.LinkAction.Add)/* TODO: test for undefined only until fixed in core */&&(links[0].LinkAction != undefined)) return false;
     } else {return false;}
     var ownerBaseHash = ownerBase();
     for (var i=0;i<length;i++) {

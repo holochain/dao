@@ -21,14 +21,6 @@ function genesis() {
 //  validation functions for every DHT entry change
 // -----------------------------------------------------------------
 
-
-function proposalExists(hash) {
-    var proposal = get(hash,{GetMask:HC.GetMask.EntryType});
-    if (isErr(proposal)) return false;
-    if (proposal != "proposal") return false;
-    return true;
-}
-
 function validate(entryName, entry, header, pkg, sources) {
     switch(entryName) {
     case "member":
@@ -297,8 +289,25 @@ function validateLink(linkEntryType,baseHash,links,pkg,sources){
     }
 }
 
+/**
+ * Check if a proposal exists
+ * @param {string} hash - the hash of the proposal
+ * @return {boolean} true if it exists, false if not
+ */
+function proposalExists(hash) {
+    var proposal = get(hash,{GetMask:HC.GetMask.EntryType});
+    if (isErr(proposal)) return false;
+    if (proposal != "proposal") return false;
+    return true;
+}
+
+/**
+ * Check if a given agent public key hash is a member of this congress
+ * @param {string} address - the hash of the public key of the agent in question
+ * @return {boolean} true if yes, false if not
+ */
 function isMember(address) {
-    var links = getLinks(getDirectory(),"member",{Load:true});
+    var links = getLinks(getDirectoryBase(),"member",{Load:true});
     if (isErr(links)) {
         links = [];
     }
@@ -310,50 +319,86 @@ function isMember(address) {
     return null;
 }
 
+/**
+ * Return a list of members of this congress
+ * @return {Object[]} an array of member entries
+ */
 function getMembers() {
-    return getLinksEntries(getDirectory(),"member");
+    return getLinksEntries(getDirectoryBase(),"member");
 }
 
+/**
+ * Get the votes that have been made on a given proposal (or any other base)
+ * @param {string} hash - the hash of the proposal (or other base)
+ * @return {Object[]} an array of vote entires
+ */
 function getVotes(hash) {
     return getLinksEntries(hash,"vote");
 }
 
+/**
+ * Get the voting rules for this congress
+ * @return {Object[]} an array of rule entires
+ */
 function getVotingRules() {
     var rules = getLinksEntries(getRulesBase(),"rules");
     return rules[0];
 }
 
+/**
+ * Get all the proposals
+ * @return {Object[]} an array of rule entires
+ */
 function getProposals(base) {
-    if (base == "") {
-        base = getProposalBase();
-    }
-    return getLinksEntries(base,"proposal",true);
+    return getLinksEntries(getProposalBase(),"proposal",true);
 }
 
+
+/**
+ * Add a member to the congress
+ * @param {Object} parameters - An object with the following properties:
+ *      {string} address - the hash of the public key of the new member
+ *      {string} name - The member's display name
+ * @return {string} hash of the member entry
+ */
 function addMember(params) {
-    var directoryBaseHash = getDirectory();
     var memberEntry = {address:params.address,name:params.name,memberSince:new Date+""};
     var memberHash = commit("member",memberEntry);
     if (!isErr(memberHash)) {
-        commit("member_links",{Links:[{Base:directoryBaseHash,Link:memberHash,Tag:"member"},
+        // create two link entries- one on the directory base for an easy way to get all members
+        // another on the member entry for easy validation of their membership
+        commit("member_links",{Links:[{Base:getDirectoryBase(),Link:memberHash,Tag:"member"},
                                       {Base:params.address,Link:memberHash,Tag:"member"}]});
     }
     return memberHash;
 }
 
+/**
+ * Remove a member from the congress
+ * @param {string} memberHash - the hash of the public key of the member to remove
+ * @return {string} an array of vote entires
+ */
 function removeMember(memberHash) {
-    var directoryBaseHash = getDirectory();
-    return commit("member_links",{Links:[{Base:directoryBaseHash,Link:memberHash,Tag:"member",LinkAction:HC.LinkAction.Del},
+    // remove links from both the directory and the member entry
+    return commit("member_links",{Links:[{Base:getDirectoryBase(),Link:memberHash,Tag:"member",LinkAction:HC.LinkAction.Del},
                                          {Base:memberHash,Link:memberHash,Tag:"member",LinkAction:HC.LinkAction.Del}]});
 }
 
+/**
+ * Create a new proposal
+ * @param {Object} parameters - An object with the following properties:
+ *      {string} description - the description of the proposal that users will see
+ *      {string=} recipient - optional recipient of currency
+ *      {number=} amount - optional amount of currency
+ * @return {string} hash of the member entry
+ */
 function newProposal(params) {
     var proposalsBaseHash = getProposalBase();
     var proposalEntry = {
         description:params.description,
         recipient:params.recipient,
         amount:params.amount,
-        votingDeadline:params.votingDeadline
+        votingDeadline:params.votingDeadline /* TODO: get rid of this, and calculate based on rules */
     };
 
     var proposalHash = commit("proposal",proposalEntry);
@@ -364,6 +409,14 @@ function newProposal(params) {
     return proposalHash;
 }
 
+/**
+ * Submit a vote on a proposal
+ * @param {Object} parameters - An object with the following properties:
+ *      {string} proposal - the hash of the proposal entry
+ *      {boolean} inSupport - is this an affirmative vote?
+ *      {string=} justification - optional justification text
+ * @return {string} hash of the member entry
+ */
 function vote(params) {
     var me = getMe();
     var voteEntry = {
@@ -374,6 +427,8 @@ function vote(params) {
     };
     var voteHash = commit("vote",voteEntry);
     if (!isErr(voteHash)) {
+        // store two links to the vote - one on the proposal entry for easy counting,
+        // another on the member entry for easy vote history retreival
         commit("vote_links",{Links:[{Base:params.proposal,Link:voteHash,Tag:"vote"},
                                     {Base:me,Link:voteHash,Tag:"vote"}]});
     }
@@ -474,7 +529,7 @@ function fundProposal(params) {
 
 // utilities -----------------------------------------------
 
-function getDirectory() {
+function getDirectoryBase() {
     return App.DNA.Hash;
 }
 
