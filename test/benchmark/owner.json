@@ -13,7 +13,7 @@
             "FnName": "addMember",
             "Input": {"address":"%partya.%reps%_key%","name":"%partya.%reps%_str%"},
             "Output": "%h1%",
-            "Repeat": 3
+            "Repeat": 4
         },
         {
             "Convey": "add partyb members",
@@ -21,7 +21,7 @@
             "FnName": "addMember",
             "Input": {"address":"%partyb.%reps%_key%","name":"%partyb.%reps%_str%"},
             "Output": "%h1%",
-            "Repeat": 2
+            "Repeat": 3
         }
     ],
     "Identity": "the progenitor"

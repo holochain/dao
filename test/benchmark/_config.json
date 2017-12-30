@@ -1,5 +1,5 @@
 {
     "GossipInterval": 300,
-    "Duration": 6,
-    "Clone": [{ "Role":"partya", "Number":3 },{ "Role":"partyb", "Number":2 }]
+    "Duration": 8,
+    "Clone": [{ "Role":"partya", "Number":4 },{ "Role":"partyb", "Number":3 }]
 }

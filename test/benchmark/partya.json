@@ -33,14 +33,15 @@
             "Zome": "congress",
             "Raw": true,
             "Input": "var proposals = getProposals('');for (var i=0;i<proposals.length;i++) {vote({proposal:proposals[i].hash,inSupport:true,justification:'I vote down the party line'})};proposals.length",
-            "Output": "3"
+            "Output": "4"
         },
         {
+            "Wait":500,
             "Convey": "it should return current voting status",
             "Zome": "congress",
             "FnName": "votingStatus",
             "Input": {"%result%":1},
-            "Output": {"numberOfVotes":5,"excecuted":false,"currentResult":1}
+            "Output": {"numberOfVotes":7,"excecuted":true,"currentResult":1}
         }
     ]
 }
