@@ -179,7 +179,6 @@ function validateLinkPkg(entry_type) { return null;}
 
 function transferOwnership(param) {
     var base = ownerBase();
-    var me = getMe();
     var linksHash = commit("owner_links",{Links:[{Base:base,Link:param.to,Tag:"owner"}]});
     return linksHash;
 }

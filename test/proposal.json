@@ -70,7 +70,7 @@
             "Zome": "congress",
             "FnName": "executeProposal",
             "Input": {"%result%":1},
-            "Output": {"message":"Validation Failed","name":"HolochainError"}
+            "Output": {"message":"Completion Validation Failed","name":"HolochainError"}
         },
         {
             "Convey": "change the rules so we can execute the proposal",

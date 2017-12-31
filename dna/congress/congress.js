@@ -500,7 +500,7 @@ function executeProposal(proposal) {
     };
 
     if (!validateCompletion(status,rules,completionEntry)) {
-        return {"message":"Validation Failed","name":"HolochainError"};
+        return {"message":"Completion Validation Failed","name":"HolochainError"};
     }
 
     var completionHash = commit("completion",completionEntry);

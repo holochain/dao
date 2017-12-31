@@ -45,7 +45,7 @@
         },
         {
             "Name": "congress",
-            "Description": "port of congres contract",
+            "Description": "port of congress contract",
             "CodeFile": "congress.js",
             "RibosomeType": "js",
             "Entries": [

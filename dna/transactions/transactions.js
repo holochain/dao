@@ -56,7 +56,7 @@ function validatePreauth(entry,balanceFunc,params) {
         return false;
     }
 
-    // otherwise it's a re
+    // otherwise it's a initial preauth
 
     var exists = call('congress','proposalExists',entry.payload.proposal);
     if (exists !== "true") return false;
