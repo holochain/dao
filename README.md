@@ -6,7 +6,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 **A Holochain implementation of the Ethereum example DAO contract**
-As part of our benchmarking for [Holo](http://holo.host) we have built a Holochain version of the sample [DAO contract](https://github.com/Holochain/dao/blob/master/dao.sol) from the Ethereum.org website.
+As part of our benchmarking for [Holo](http://holo.host) we have built a Holochain version of the sample [DAO contract](https://github.com/Holochain/dao/blob/master/dao.sol) from the Ethereum.org website.  Comparing Holochain apps to Ethereum smart contracts is a bit like comparing apples and pineapples.  Though they are both distributed computing platforms, because of their different starting assumptions, the results are quite difficult to compare.  For example, Ethereum comes with a built in transactional layer, which Holochain does not.  So in this app we hand-coded a mutual-credit transaction zome to emulate that functionality.
 
 **[Code Status:](https://github.com/metacurrency/holochain/milestones?direction=asc&sort=completeness&state=all)** Pre-alpha. Not for production use. This application has not been audited for any security validation.
 
@@ -34,10 +34,44 @@ hcdev test
 Currently there is one scenario test:
 
 #### benchmark
+This scenario spins up an owner node, an implementer node and a bunch of member nodes which create and vote on a bunch of proposals.  Finally at the end the implementer executes the proposals.
+
 ``` shell
-hcdev -mdns=true scenario benchmark
+hcdev -mdns=true -no-nat-upnp scenario -benchmarks benchmark
+
 ```
-This scenario spins up the owner node and a bunch of member nodes which create and vote on a bunch of proposals.
+This will output the detailed benchmark tests including the benchmark data for each node.  To see the aggregate benchmark data you can pass the output through the `bench.pl` script like this:
+
+``` shell
+hcdev -mdns=true -no-nat-upnp scenario -benchmarks benchmark | perl bench.pl
+
+```
+Which should result in some output something like:
+```
+Total chain: 45.22
+Total DHT: 1287.27
+Total Bytes Sent: 7394.64
+Total CPU: 20840
+```
+
+This repo contains a dao ethereum scenario built as a truffle test to calculate how much gas is used to do a similar amount of computation.  To install and run this scenario:
+
+``` shell
+npm install -g truffle
+cd ethdao
+npm install
+truffle develop
+```
+Then from the truffle command line:
+```
+migrate
+test
+```
+This should produce output that ends with the line something like:
+
+``` shell
+Total Gas Used:6224448
+```
 
 ## Contribute
 We welcome pull requests and issue tickets.  Find us on [gitter](https://gitter.im/metacurrency/holochain) to chat.
