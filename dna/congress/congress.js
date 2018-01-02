@@ -442,7 +442,8 @@ function votingStatus(proposal) {
     for (var i=0;i<numberOfVotes;i++) {
         currentResult += votes[i].inSupport ? 1 : -1;
     }
-    return {excecuted:completionExists(proposal),numberOfVotes:numberOfVotes,currentResult:currentResult};
+    var status ={excecuted:completionExists(proposal),numberOfVotes:numberOfVotes,currentResult:currentResult};
+    return status;
 }
 
 function changeVotingRules(param){

@@ -48,9 +48,16 @@ contract('Congress', (accounts) => {
                 inc(x.receipt);
             }
 
+            let proposalSizeKBytes = 1;
+            let proposalTxt = "";
+            for(let i=1;i<=1024*proposalSizeKBytes;i++) {
+                proposalTxt += "0";
+
+            }
+
             // all members of party a make a proposal and fund it
             for(let i=1;i<=partyaMembers;i++) {
-                let x = await congress.newProposal(implementer,1234,"save the partya"+parseInt(i),[],{from:accounts[i]});
+                let x = await congress.newProposal(implementer,1234,proposalTxt,[],{from:accounts[i]});
                 if (debug) console.log("\nnewProposal: ",x);
                 inc(x.receipt);
 
@@ -58,7 +65,6 @@ contract('Congress', (accounts) => {
                 x = await congress.send(1234,{from:accounts[i]});
                 inc(x.receipt);
                 console.log("congress balance:",web3.eth.getBalance(congress.address));
-
             }
 
             // party a members vote in favor of all the partya proposals

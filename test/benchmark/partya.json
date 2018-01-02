@@ -14,7 +14,7 @@
             "Convey": "All partya members add a proposal",
             "Zome": "congress",
             "FnName": "newProposal",
-            "Input": {"description":"save the %partya.%clone%%","recipient":"%implementer_key%","amount":100,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"},
+            "Input": {"description":"012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789 save the %partya.%clone%%","recipient":"%implementer_key%","amount":100,"votingDeadline":"Sat Dec 16 2018 08:29:35 GMT-0500 (EST)"},
             "Output": "%h1%"
         },
         {
@@ -28,7 +28,7 @@
             "Output": "%h1%"
         },
         {
-            "Wait":500,
+            "Time":5000,
             "Convey": "and vote in favor of their own parties proposals",
             "Zome": "congress",
             "Raw": true,
@@ -36,7 +36,7 @@
             "Output": "4"
         },
         {
-            "Wait":500,
+            "Time":19000,
             "Convey": "it should return current voting status",
             "Zome": "congress",
             "FnName": "votingStatus",

@@ -9,14 +9,15 @@
             "Exposure":"public"
         },
         {
-            "Wait": 5500,
+            "Time": 15000,
             "Convey": "implementer executes proposals should succeed",
             "Zome": "congress",
             "Raw": true,
-            "Input": "var results=[];var proposals = getProposals('');for (var i=0;i<proposals.length;i++) {results.push(executeProposal(proposals[i].hash))}; JSON.stringify(results)",
-            "Output": "[\"%h11%\",\"%h8%\",\"%h5%\",\"%h2%\"]"
+            "Input": "var results=[];var proposals = getProposals('');for (var i=0;i<proposals.length;i++) {results.push(executeProposal(proposals[i].hash))}; 'proposals:'+parseInt(proposals.length)+'  '+JSON.stringify(results)",
+            "RegExp": "proposals:4.*\"%h11%\",\"%h8%\",\"%h5%\",\"%h2%\"]"
         },
         {
+            "Time": 19000,
             "Convey":"implementer's balance after excecution should be the funding",
             "Zome": "transactions",
             "FnName": "getBalance",
